@@ -314,13 +314,6 @@ export default function TabLayout() {
     });
   }, [theme]);
 
-  // Performance monitoring in development
-  useEffect(() => {
-    if (__DEV__) {
-      console.log("Tab layout mounted successfully");
-    }
-  }, []);
-
   return <Tabs screenOptions={screenOptions}>{renderTabs}</Tabs>;
 }
 

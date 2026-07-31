@@ -35,7 +35,8 @@ DailyFlow is a modern habit tracker built with **Expo** and **React Native**. It
 - **NativeWind**
 - **Expo SQLite / Supabase**
 - **TanStack Query**
-- **Zustand**
+- **Axios (Auth interceptors)**
+- **Zustand (2kb vs Redux 50kb+)**
 - **React Native Reanimated**
 
 ---
