@@ -1,6 +1,6 @@
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
-import Separator from "@/components/ui/Separator";
+import { Button } from "@/components/ui/button";
+import { Divider } from "@/components/ui/divider";
+import { Input, InputField, InputSlot } from "@/components/ui/input";
 import { useAuthStore } from "@/lib/auth/authStore";
 import Lucide from "@react-native-vector-icons/lucide";
 import { useState } from "react";
@@ -20,6 +20,11 @@ export default function LoginScreen({
   const { isLoading, setIsLoading } = useAuthStore();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const handleLogin = () => {
+    if (!email?.trim() || !password?.trim()) {
+    }
+  };
+
   const inputClassName = "border border-gray-200 rounded-md px-4";
 
   const PasswordToggleIcon = (
@@ -34,29 +39,24 @@ export default function LoginScreen({
         Welcome Back
       </Text>
       <View className="flex flex-col gap-4">
-        <Input
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          editable={!isLoading}
-          className={inputClassName}
-        />
-        <Input
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={!showPassword}
-          editable={!isLoading}
-          className={inputClassName}
-          rightElement={PasswordToggleIcon}
-        />
-        <Button
-          variant="primary"
-          onPress={() => {}}
-          loading={isLoading}
-          size="sm"
-        >
+        <Input>
+          <InputField
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+          />
+        </Input>
+        <Input className={inputClassName}>
+          <InputField
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+          />
+
+          <InputSlot>{PasswordToggleIcon}</InputSlot>
+        </Input>
+        <Button onPress={handleLogin} isDisabled={isLoading}>
           Login
         </Button>
       </View>
@@ -67,7 +67,7 @@ export default function LoginScreen({
             <Text className="text-primary">Register</Text>
           </Text>
         </TouchableOpacity>
-        <Separator className="my-3">OR</Separator>
+        <Divider className="my-3">OR</Divider>
         <TouchableOpacity onPress={onGuestPress} disabled={isLoading}>
           <Text className="text-center">Continue as Guest</Text>
         </TouchableOpacity>

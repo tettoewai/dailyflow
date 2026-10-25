@@ -1,12 +1,6 @@
 import api from "@/services/api";
 import { User } from "./authStore";
 
-export interface AuthResponse {
-  accessToken: string;
-  refreshToken: string;
-  user?: User;
-}
-
 export interface LoginReqeust {
   email: string;
   password: string;
@@ -19,37 +13,35 @@ export interface RegisterRequest {
   confirmPassword: string;
 }
 
-export interface ActionResponse {
+export interface ActionResponse<T = void> {
   success: boolean;
   message: string;
+  data?: T;
 }
 
 // Email + password login
-export async function login(data: LoginReqeust): Promise<AuthResponse> {
-  const response = await api.post<AuthResponse>("/auth/login", data);
+export async function login(data: LoginReqeust): Promise<ActionResponse> {
+  const response = await api.post<ActionResponse>("/auth/login", data);
   return response.data;
 }
 
 // Email + password registeration
-export async function register(data: RegisterRequest): Promise<AuthResponse> {
-  const response = await api.post<AuthResponse>("/auth/register", data);
+export async function register(data: RegisterRequest): Promise<ActionResponse> {
+  const response = await api.post<ActionResponse>("/auth/register", data);
   return response.data;
 }
 
 // Guest login (no email/password)
-export async function loginAsGuest(): Promise<AuthResponse> {
-  const response = await api.post<AuthResponse>("/auth/guest");
+export async function loginAsGuest(): Promise<ActionResponse> {
+  const response = await api.post<ActionResponse>("/auth/guest");
   return response.data;
 }
 
 // Refrest access token
 export async function refrestTokens(
   refreshToken: string,
-): Promise<{ accessToken: string; refreshToken: string }> {
-  const response = await api.post<{
-    access_token: string;
-    refresh_token: string;
-  }>(
+): Promise<ActionResponse> {
+  const response = await api.post<ActionResponse>(
     "/auth/refresh",
     { refreshToken },
     {
@@ -59,10 +51,7 @@ export async function refrestTokens(
       },
     },
   );
-  return {
-    accessToken: response.data.access_token,
-    refreshToken: response.data.refresh_token,
-  };
+  return response.data;
 }
 
 // Logout
@@ -74,8 +63,8 @@ export async function logout(): Promise<ActionResponse> {
 // Convert Guest account to Regular user
 export async function convertGuesttoUser(
   data: RegisterRequest,
-): Promise<AuthResponse> {
-  const response = await api.post<AuthResponse>("/auth/convert-guest", data);
+): Promise<ActionResponse> {
+  const response = await api.post<ActionResponse>("/auth/convert-guest", data);
   return response.data;
 }
 

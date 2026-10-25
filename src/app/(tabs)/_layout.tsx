@@ -1,4 +1,3 @@
-import { useCustomTheme } from "@/theme/use-theme";
 import LucideIcon from "@react-native-vector-icons/lucide";
 import { Tabs } from "expo-router";
 import { BottomTabBarButtonProps } from "expo-router/build/layouts/Tabs";
@@ -81,19 +80,10 @@ AnimatedTabIcon.displayName = "AnimatedTabIcon";
 interface CreateTabButtonProps {
   onPress?: BottomTabBarButtonProps["onPress"];
   accessibilityState?: BottomTabBarButtonProps["accessibilityState"];
-  primary: string;
-  primaryForeground: string;
-  surface: string;
 }
 
 const CreateTabButton = memo(
-  ({
-    onPress,
-    accessibilityState,
-    primary,
-    primaryForeground,
-    surface,
-  }: CreateTabButtonProps) => {
+  ({ onPress, accessibilityState }: CreateTabButtonProps) => {
     const focused = accessibilityState?.selected ?? false;
     const scale = useSharedValue(1);
     const rotate = useSharedValue(0);
@@ -132,17 +122,13 @@ const CreateTabButton = memo(
               styles.createButton,
               animatedStyle,
               {
-                backgroundColor: primary,
                 opacity: pressed ? 0.88 : 1,
-                borderColor: surface,
                 borderWidth: focused ? 3 : 0,
-                shadowColor: primary,
-                shadowOpacity: focused ? 0.4 : 0.3,
               },
             ]}
           >
             <Animated.View style={iconAnimatedStyle}>
-              <LucideIcon name="plus" size={30} color={primaryForeground} />
+              <LucideIcon name="plus" size={30} color="white" />
             </Animated.View>
           </Animated.View>
         )}
@@ -190,7 +176,6 @@ class TabErrorBoundary extends React.Component<
 
 // Main Tab Layout Component
 export default function TabLayout() {
-  const theme = useCustomTheme();
   const insets = useSafeAreaInsets();
 
   const paddingBottom = Math.max(insets.bottom, 12);
@@ -202,19 +187,14 @@ export default function TabLayout() {
       headerShown: false,
       tabBarShowLabel: true,
       tabBarLabelStyle: styles.tabBarLabel,
-      tabBarActiveTintColor: theme.primary,
-      tabBarInactiveTintColor: theme.muted,
       sceneStyle: {
         paddingBottom: tabBarHeight,
       },
       tabBarStyle: {
-        backgroundColor: theme.background,
-        borderTopColor: theme.border,
         borderTopWidth: StyleSheet.hairlineWidth,
         height: tabBarHeight,
         paddingBottom,
         paddingTop: 8,
-        shadowColor: theme.shadow,
         shadowOffset: { width: 0, height: -6 },
         shadowOpacity: 0.08,
         shadowRadius: 12,
@@ -241,7 +221,7 @@ export default function TabLayout() {
         </Pressable>
       ),
     }),
-    [theme, paddingBottom, tabBarHeight],
+    [paddingBottom, tabBarHeight],
   );
 
   // Render tabs based on configuration
@@ -266,9 +246,6 @@ export default function TabLayout() {
                   <CreateTabButton
                     onPress={props.onPress}
                     accessibilityState={props.accessibilityState}
-                    primary={theme.primary}
-                    primaryForeground={theme.primaryForeground}
-                    surface={theme.background}
                   />
                 </TabErrorBoundary>
               ),
@@ -295,7 +272,6 @@ export default function TabLayout() {
             ...(displayBadge && {
               tabBarBadge: displayBadge,
               tabBarBadgeStyle: {
-                backgroundColor: theme.danger,
                 fontSize: 10,
                 fontWeight: "700",
                 minWidth: 18,
@@ -312,7 +288,7 @@ export default function TabLayout() {
         />
       );
     });
-  }, [theme]);
+  }, []);
 
   return <Tabs screenOptions={screenOptions}>{renderTabs}</Tabs>;
 }
